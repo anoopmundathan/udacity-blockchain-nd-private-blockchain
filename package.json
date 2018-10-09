@@ -1,0 +1,16 @@
+{
+  "name": "private-blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Anoop Mundathan <anoop.mundathan@gmail.com> (http://anoopmundathan.me/)",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "3.1.9-1",
+    "level": "4.0.0"
+  }
+}
