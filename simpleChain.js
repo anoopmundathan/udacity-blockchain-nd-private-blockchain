@@ -63,7 +63,9 @@ class Blockchain {
     }
 
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
+    console.log(`New hash: ${newBlock.hash}`)
     await this.addBlockToDB(newBlock.height, JSON.stringify(newBlock));
+    
   }
 
   addBlockToDB(key, value) {
@@ -104,32 +106,33 @@ class Blockchain {
   async validateChain() {
     const errorLog = [];
     let previousHash = ''
+    let valid = false
+    let block;
     const height = await this.getBlockHeight();
 
-    for (let i = 0; i < height; i++) {
-      this.getBlock(i)
-        .then((block) => {
+    for (let i = 0; i <= height; i++) {
+      block = await this.getBlock(i)
+      valid = await this.validateBlock(block.height)
 
-          if (!this.validateBlock(block.height)) {
-            errorLog.push(i)
-          }
+      if (!valid) {
+        errorLog.push(i)
+      }
 
-          if (block.previousBlockHash !== previousHash) {
-            errorLog.push(i)
-          }
+      if (block.previousBlockHash !== previousHash) {
+        errorLog.push(i)
+      }
 
-          previousHash = block.hash
+      previousHash = block.hash
 
-          if (i === (height - 1)) {
-            if (errorLog.length > 0) {
-              console.log(`Number of block errors = ${errorLog.length}`)
-              console.log(`Blocks: ${errorLog}`)
-            } else {
-              console.log('No error')
-            }
-          }
+      if (i === height) {
+        if (errorLog.length > 0) {
+          console.log(`Number of block errors = ${errorLog.length}`)
+          console.log(`Blocks: ${errorLog}`)
+        } else {
+          console.log('No error')
+        }
+      }
 
-      })
     }
   }
 }
